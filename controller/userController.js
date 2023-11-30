@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 async function add(req, res, next) {
   try {
     const salt = await bcrypt.genSalt();
-    console.log(salt);
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const user = new User({
       email: req.body.email,
