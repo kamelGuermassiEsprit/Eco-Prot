@@ -4,6 +4,10 @@ const mongo = require("mongoose");
 const bodyParser = require("body-parser");
 const mongoconnect = require("./config/dbconnection.json");
 const path = require("path");
+
+
+
+
 const { add } = require("./controller/chatcontroller");
 const {
   addpartiesocket,
@@ -47,6 +51,10 @@ io.on("connection", (socket) => {
   console.log("user connected");
   socket.emit("msg", "user is connected");
 
+  socket.on("disconnect", () => {
+    console.log("user disconnect");
+    io.emit("msg", "user disconnect");
+
 
 
   
@@ -71,10 +79,17 @@ io.on("connection", (socket) => {
     io.emit("msg", data.name + ":" + data.object);
   });
 
-  socket.on("disconnect", () => {
-    console.log("user disconnect");
-    io.emit("msg", "user disconnect");
+
   });
+
 });
+
+
+
+
+
+
+
+
 server.listen(3000, console.log("server run"));
 module.exports = app;
