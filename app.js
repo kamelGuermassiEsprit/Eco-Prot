@@ -9,6 +9,9 @@ const {
   addpartiesocket,
   affichesocket,
 } = require("./controller/joueurcontroller");
+
+
+
 mongo
   .connect(mongoconnect.url, {
     useNewUrlParser: true,
@@ -18,18 +21,35 @@ mongo
   .catch((err) => console.log(err));
 
 const userrouter = require("./routes/user");
+const eventrouter = require("./routes/event");
+const formationrouter = require("./routes/formation");
+
+
 let app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "twig");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/user", userrouter);
+app.use("/event",eventrouter);
+app.use("/formation",formationrouter);
+
+
+
 
 const server = http.createServer(app);
+
+
 const io = require("socket.io")(server);
+
+
 io.on("connection", (socket) => {
   console.log("user connected");
   socket.emit("msg", "user is connected");
+
+
+
+  
 
   socket.on("partie", (data) => {
     addpartiesocket(data);
