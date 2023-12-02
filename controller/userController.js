@@ -49,7 +49,7 @@ async function login(req, res, next) {
     console.log(err);
   }
 }
-
+/*
 async function getall(req, res, next) {
   try {
     const data = await Joueur.find();
@@ -146,15 +146,19 @@ async function affichesocket(data) {
     console.log(err);
   }
 }
-
+*/
 module.exports = {
   add,
   login,
+  
   /*  getall,
   getbyid,
   deletebyid,
   attaque,
   addpartie,
   addpartiesocket,
-  affichesocket, */
+  affichesocket, 
+  
+  
+  */
 };
