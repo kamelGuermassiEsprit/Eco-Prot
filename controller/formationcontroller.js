@@ -1,5 +1,4 @@
 const Formation = require("../model/formation");
-const Event =require("../model/formation");
 
 
 
@@ -10,7 +9,7 @@ async function add(req, res, next) {
   try {
     console.log("body :" + JSON.stringify(req.body));
     const formation = new Formation(req.body);
-    await event.save();
+    await formation.save();
     res.send("formation add");
   } catch (err) {
     console.log(err);
@@ -25,8 +24,8 @@ async function add(req, res, next) {
 
 async function getFormations(req, res,next){
   try {
-    const formations = await Formation.find();
-    res.json(formations);
+    const data = await Formation.find();
+    res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -37,13 +36,13 @@ async function getFormations(req, res,next){
 // Get a single formation by ID
 
 
-async function getFormationtById(req, res,next){
+async function getFormationById(req, res,next){
   try {
-    const formation = await Formation.findById(req.params.id);
-    if (!event) {
+    const data= await Formation.findById(req.params.id);
+    if (!data) {
       return res.status(404).json({ error: 'Formation not found' });
     }
-    res.json(formation);
+    res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -73,8 +72,8 @@ async function updateFormationById(req, res,next){
 // Delete an formation by ID
 async function deleteFormationById(req, res,next){
   try {
-    const formation = await Formation.findByIdAndDelete(req.params.id);
-    if (!formation) {
+    const data = await Formation.findByIdAndDelete(req.params.id);
+    if (!data) {
       return res.status(404).json({ error: 'Formation not found' });
     }
     res.json({ message: 'Formation deleted successfully' });
@@ -85,4 +84,10 @@ async function deleteFormationById(req, res,next){
 
 
 
-module.exports = { add, getFormations, getFormationtById,updateFormationById,deleteFormationById };
+
+
+
+
+
+
+module.exports = { add, getFormations, getFormationById,updateFormationById,deleteFormationById };

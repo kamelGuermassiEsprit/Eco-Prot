@@ -1,0 +1,131 @@
+<html>
+    <script src="/socket.io/socket.io.js"></script>
+<head>
+    
+</head>
+<body>
+<center><label for="">Nom Event:</label>
+    <input id="id1" type="text"><br>
+    <label for="">Category :</label>
+    <input id="id2" type="text"><br>
+    <label for="">Start Date :</label>
+    <input id="id3" type="text"><br>
+    <label for="">End Date :</label>
+    <input id="id4" type="text"><br>
+    <label for=""> Location :</label>
+    <input id="id5" type="text"><br>
+    <label for="">Organizer:</label>
+    <input id="id6" type="text"><br>
+    <input onclick="envoye()" type="submit">
+    <button onclick="afficherStat()" >Afficher Events</button>
+    <div id="statContainer"></div></center>
+    
+    
+    
+    <script>
+
+const socket=io.connect();
+
+
+socket.on("msg", (message) => {
+    console.log(message);
+  });
+
+
+
+socket.on("event",(data)=>{
+
+    const s=document.createElement("p")
+    s.innerHTML=JSON.stringify(data);
+    document.body.appendChild(s)
+})
+
+async function envoye(){
+
+    const nom = document.getElementById("id1").value;
+   const category = document.getElementById("id2").value;
+  const  startdate = new Date(document.getElementById("id3").value);
+   const enddate = new Date(document.getElementById("id4").value);
+   const location = document.getElementById("id5").value;
+   const organizer = document.getElementById("id6").value;
+
+
+
+   const event={
+        nom:nom,  
+        category:category,  
+        startdate:startdate,
+        enddate:enddate,
+        location:location,
+        organizer:organizer,
+    }
+
+    socket.emit("event",event)
+    
+}
+
+   // Gérez l'événement "afficherStat" du serveur
+   socket.on("afficherStat", (events) => {
+        // Affichez les informations des événements sur la page web
+        const statContainer = document.getElementById("statContainer");
+        statContainer.innerHTML = "";
+
+        events.forEach((event) => {
+            const eventInfo = document.createElement("div");
+            eventInfo.innerHTML = `
+                <p>Nom Event: ${event.nom}</p>
+                <p>Category: ${event.category}</p>
+                <p>Start Date: ${event.startdate}</p>
+                <p>End Date: ${event.enddate}</p>
+                <p>Location: ${event.location}</p>
+                <p>Organizer: ${event.organizer}</p>
+                <hr>
+            `;
+            statContainer.appendChild(eventInfo);
+        });
+    });
+
+
+
+
+
+
+function afficherStat() {
+        // Créez un objet event avec les données du formulaire
+        const event = {
+            nom: document.getElementById("id1").value,
+            category: document.getElementById("id2").value,
+            startdate: document.getElementById("id3").value,
+            enddate: document.getElementById("id4").value,
+            location: document.getElementById("id5").value,
+            organizer: document.getElementById("id6").value,
+        };
+
+        // Émettez l'événement "afficherStat" avec les données de l'événement
+        socket.emit("afficherStat", event);
+    }
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

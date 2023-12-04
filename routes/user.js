@@ -11,6 +11,12 @@ router.get("/home", (req, res, next) => {
 });
 
 router.post("/login", userController.login);
+
+
+router.get("/event", (req, res, next) => {
+  res.render("event");
+
+})
 /* router.get("/getall", joueurController.getall);
 router.get("/getbyid/:id", joueurController.getbyid);
 router.delete("/deletebyid/:id", joueurController.deletebyid);

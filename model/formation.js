@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const formationSchema = new mongoose.Schema({
-  title: {
+  pseudo: {
     type: String,
     required: true,
   },
@@ -10,12 +10,12 @@ const formationSchema = new mongoose.Schema({
     required: true,
   },
 
-  startDate: {
+  startTime: {
     type: Date,
     required: true,
   },
 
-  endDate: {
+  endTime: {
     type: Date,
     required: true,
   },
@@ -24,11 +24,7 @@ const formationSchema = new mongoose.Schema({
     required: true,
   },
 
-  location: {
-    type: String,
-    required: true,
-  },
-
+  
   instructor: {
     type: String,
     required: true,
