@@ -1,9 +1,9 @@
 const Partie = require("../model/partie");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
-
-async function add(req, res, next) {
+async function createAcount(req, res, next) {
   try {
+    console.log("create acount");
     const salt = await bcrypt.genSalt();
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const user = new User({
@@ -11,8 +11,8 @@ async function add(req, res, next) {
       passwordHash: req.body.password,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
-      disabled: req.body.disabled,
-      role: req.body.role,
+      disabled: false,
+      role: "simple",
     });
     await user.save();
     res.status(200).send("user added successfully ");
@@ -21,15 +21,11 @@ async function add(req, res, next) {
   }
 }
 
-async function login(req, res, next) {
+async function login(req, res, io) {
   try {
     const existingUser = await User.findOne({
       email: req.body.email,
     });
-    /* const user = await User.find({
-      email: req.body.email,
-      passwordHash: req.body.password,
-    }); */
     if (!existingUser) {
       res.status(501).send("user Not exist");
     } else {
@@ -37,7 +33,7 @@ async function login(req, res, next) {
         req.body.password,
         existingUser.passwordHash
       );
-      console.log(passwordCorrect);
+
       if (!passwordCorrect) {
         res.status(401).send("Wrong password");
       } else {
@@ -48,7 +44,6 @@ async function login(req, res, next) {
     console.log(err);
   }
 }
-
 async function getall(req, res, next) {
   try {
     const data = await Joueur.find();
@@ -147,7 +142,7 @@ async function affichesocket(data) {
 }
 
 module.exports = {
-  add,
+  createAcount,
   login,
   /*  getall,
   getbyid,

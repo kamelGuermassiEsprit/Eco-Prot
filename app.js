@@ -9,6 +9,7 @@ const {
   addpartiesocket,
   affichesocket,
 } = require("./controller/joueurcontroller");
+const { login, emailUserConnected } = require("./controller/userController");
 mongo
   .connect(mongoconnect.url, {
     useNewUrlParser: true,
@@ -23,11 +24,20 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "twig");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use("/user", userrouter);
-
+app.use("/", userrouter);
+const User = require("./model/user");
 const server = http.createServer(app);
 const io = require("socket.io")(server);
+var usrco;
 io.on("connection", (socket) => {
+  app.post("/login", (req, res) => {
+    login(req, res, socket);
+    usrco = req.body.email;
+  });
+  socket.on("user-connected", async (data) => {
+    console.log(usrco, "(((((((((((");
+    socket.emit("user-connected-front", usrco);
+  });
   console.log("user connected");
   socket.emit("msg", "user is connected");
 
@@ -56,5 +66,6 @@ io.on("connection", (socket) => {
     io.emit("msg", "user disconnect");
   });
 });
+
 server.listen(3000, console.log("server run"));
 module.exports = app;
