@@ -1,4 +1,3 @@
-const Partie = require("../model/partie");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 
