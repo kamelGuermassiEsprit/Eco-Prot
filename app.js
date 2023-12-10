@@ -55,6 +55,8 @@ io.on("connection", (socket) => {
   
   socket.on("event", (data) => {
     console.log("Received event:", data);
+
+
     // Broadcast the event data to all connected clients
     addeventsocket(data);
 
@@ -64,6 +66,7 @@ io.on("connection", (socket) => {
   
   
   socket.on("afficherStat", async () => {
+    
     // Récupérez tous les événements depuis la base de données
     const events = await Affichersocket();
 

@@ -21,8 +21,10 @@
     <div id="statContainer"></div></center>
     
     
-    
-    <script>
+
+
+<script>
+
 
 const socket=io.connect();
 
@@ -33,12 +35,18 @@ socket.on("msg", (message) => {
 
 
 
+
+
+
+
 socket.on("event",(data)=>{
 
     const s=document.createElement("p")
     s.innerHTML=JSON.stringify(data);
     document.body.appendChild(s)
 })
+
+
 
 async function envoye(){
 
@@ -64,9 +72,16 @@ async function envoye(){
     
 }
 
-   // Gérez l'événement "afficherStat" du serveur
-   socket.on("afficherStat", (events) => {
-        // Affichez les informations des événements sur la page web
+   
+
+
+
+
+
+
+
+socket.on("afficherStat", (events) => {
+        
         const statContainer = document.getElementById("statContainer");
         statContainer.innerHTML = "";
 
@@ -91,7 +106,9 @@ async function envoye(){
 
 
 function afficherStat() {
-        // Créez un objet event avec les données du formulaire
+
+    
+        
         const event = {
             nom: document.getElementById("id1").value,
             category: document.getElementById("id2").value,
@@ -101,29 +118,11 @@ function afficherStat() {
             organizer: document.getElementById("id6").value,
         };
 
-        // Émettez l'événement "afficherStat" avec les données de l'événement
+       
         socket.emit("afficherStat", event);
     }
 
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </script>

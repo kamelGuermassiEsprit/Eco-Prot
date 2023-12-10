@@ -3,7 +3,7 @@ const Event =require("../model/event");
 
 
 
-// Create a new event
+
 
 
 async function add(req, res, next) {
@@ -20,7 +20,7 @@ async function add(req, res, next) {
 
 
 
-// Get all events
+
 
 
 async function getEvents(req, res,next){
@@ -34,7 +34,7 @@ async function getEvents(req, res,next){
 
 
 
-// Get a single event by ID
+
 
 
 async function getEventById(req, res,next){
@@ -70,7 +70,7 @@ async function updateEventById(req, res,next){
 
 
 
-// Delete an event by ID
+
 async function deleteEventById(req, res,next){
   try {
     const event = await Event.findByIdAndDelete(req.params.id);
@@ -82,6 +82,10 @@ async function deleteEventById(req, res,next){
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
+
 
 
 
@@ -111,6 +115,8 @@ async function addeventsocket(data) {
     console.error(err);
   }
 }
+
+
 
 
 

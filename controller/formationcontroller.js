@@ -2,7 +2,6 @@ const Formation = require("../model/formation");
 
 
 
-// Create a new formation
 
 
 async function add(req, res, next) {
@@ -19,7 +18,7 @@ async function add(req, res, next) {
 
 
 
-// Get all formations
+
 
 
 async function getFormations(req, res,next){
@@ -33,7 +32,6 @@ async function getFormations(req, res,next){
 
 
 
-// Get a single formation by ID
 
 
 async function getFormationById(req, res,next){
@@ -50,7 +48,7 @@ async function getFormationById(req, res,next){
 
 
 
-// Update an formation by ID
+
 
 async function updateFormationById(req, res,next){
   try {
@@ -69,7 +67,6 @@ async function updateFormationById(req, res,next){
 
 
 
-// Delete an formation by ID
 async function deleteFormationById(req, res,next){
   try {
     const data = await Formation.findByIdAndDelete(req.params.id);
