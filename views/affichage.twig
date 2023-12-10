@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>Température </title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <center>
+      <h1>Température </h1>
+        <form id="temperatureForm">
+
+            <button onclick="affiche()" >Show weather</button>
+    </form></center>
+
+<script>
+
+
+
+  
+ const socket=io.connect();
+ socket.on("affichage",(data)=>{
+ console.log("affichage"+JSON.stringify(data))
+ s=document.createElement("p")
+ s.innerHTML=(r)
+ document.body.appendChild(s)
+})
+
+function affiche(){
+   
+    
+    socket.emit("affichage",r)}
+
+</script> 
+</body>
+</html>

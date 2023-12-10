@@ -2,9 +2,12 @@ const yup = require("yup");
 const validate = async (req, res, next) => {
   try {
     const Schema = yup.object().shape({
-      name: yup.string().required(),
-      email: yup.string().email().required(),
-      nbrstudent: yup.number().required(),
+      conditions: yup.string().required(),
+      wind: yup.string().required(),
+      precipitation: yup.number().required(),
+      visibility: yup.string().required(),
+      pressure: yup.string().required(),
+     
     });
     await Schema.validate(req.body);
     next();
@@ -15,3 +18,4 @@ const validate = async (req, res, next) => {
 };
 
 module.exports = validate;
+

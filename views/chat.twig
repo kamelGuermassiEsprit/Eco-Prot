@@ -1,0 +1,40 @@
+
+
+<html>
+    <head>
+      <title>Chat Area</title>
+<script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body><center>
+      <h1>Chat Area</h1>
+       <label>msg :</label><input type="text" onkeyup="typing()" id="ch"><input type="submit" onclick="send()"></center>
+     <center><script>
+             const socket=io.connect();
+             name=prompt("votre nom")
+             socket.on("typing",(data)=>{
+                p=document.createElement("p")
+                p.innerText=data
+                document.body.appendChild(p)
+             })
+             socket.on("msg",(data)=>{
+                p=document.createElement("p")
+                p.innerText=data
+                document.body.appendChild(p)
+             })
+             x=document.getElementById("ch")
+
+             function typing(){
+
+socket.emit("typing",name)
+
+             }
+             function send(){
+                console.log("message : "+x.value)
+                socket.emit("msg",{object:x.value,name:name})
+             }
+
+
+        </script></center>   
+
+    </body>
+</html>
