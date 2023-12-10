@@ -1,112 +1,84 @@
-const http = require("http");
-const express = require("express");
-const mongo = require("mongoose");
-const bodyParser = require("body-parser");
-const mongoconnect = require("./config/dbconnection.json");
-const path = require("path");
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const http=require("http");
+const mongo=require("mongoose");
+const mongoconnection=require("./config/dbconnection.json");
+const app = express();
+const bodyParser=require("body-parser")
+//const geolocation = require('node-geolocation');
+const geolocation = require('geolocation');
+//const io = require('socket.io');
+const dechetRouter=require("./routes/dechet")
+const collecteRouter=require("./routes/collecte")
+const twig = require('twig');
 
 
 
-
-//const { add } = require("./controller/chatcontroller");
-
-const { addeventsocket,Affichersocket } = require("./controller/eventcontroller");
-
-
-
-
-const { login, emailUserConnected } = require("./controller/userController");
-mongo
-  .connect(mongoconnect.url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+mongo.connect(mongoconnection.url, {
+    useNewUrlParser:true,
+    useUnifiedTopology:true,
   })
-  .then(() => console.log("mongo connecter"))
-  .catch((err) => console.log(err));
+  .then(()=>console.log('mongo connected'))
+  .catch((err)=>console.log(err));
+
+  app.set('views', path.join(__dirname, 'views'));
+  app.set('view engine', 'twig');
   
-
-
-const userrouter = require("./routes/user");
-const eventrouter = require("./routes/event");
-const formationrouter = require("./routes/formation");
-
-let app = express();
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "twig");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use("/user", userrouter);
-app.use("/event", eventrouter);
-app.use("/formation", formationrouter);
-
-app.use("/", userrouter);
-const User = require("./model/user");
-const server = http.createServer(app);
-
-const io = require("socket.io")(server);
-
-var usrco;
-io.on("connection", (socket) => {
-  app.post("/login", (req, res) => {
-    login(req, res, socket);
-    usrco = req.body.email;
-  });
-  socket.on("user-connected", async (data) => {
-    console.log(data, "(((((((((((");
-    socket.emit("user-connected-front", data);
-  });
-  console.log("user connected");
-  socket.emit("msg", "user is connected");
-
-
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(cookieParser());
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(bodyParser.urlencoded({extended : true}));
+  app.use(bodyParser.json());
+  app.use('/dechet',dechetRouter);
+  app.use('/collecte',collecteRouter);
   
-  socket.on("event", (data) => {
-    console.log("Received event:", data);
+  const server=http.createServer(app);
+  const io=require("socket.io")(server);
 
-
-    // Broadcast the event data to all connected clients
-    addeventsocket(data);
-
-    io.emit("event", data);
-  });
-
-  
-  
-  socket.on("afficherStat", async () => {
+  const {
     
-    // Récupérez tous les événements depuis la base de données
-    const events = await Affichersocket();
+    affichesocket,
+  } = require("./controller/dechetsController");
 
-    // Émettez les événements au client
-    io.emit("afficherStat", events);
-  });
-
-
-  socket.on("disconnect", () => {
-    console.log("user disconnect");
-    io.emit("msg", "user disconnect");
-
-    socket.on("partie", (data) => {
-      addpartiesocket(data);
-      io.emit("partie", data);
+  function getGPSLocation() {
+    geolocation.getCurrentPosition((err, position) => {
+        if (err) throw err;
+        console.log('Latitude:', position.coords.latitude);
+        console.log('Longitude:', position.coords.longitude);
+  
+       
+        const io = require("socket.io-client");
+        const socket = io.connect();
+        socket.emit('nouvelleDetection', { latitude: position.coords.latitude, longitude: position.coords.longitude });
     });
+  }
 
-    socket.on("aff", async (data) => {
-      const r = await affichesocket(data);
-      console.log("jjjjjj", JSON.stringify(r));
-      io.emit("aff", r);
-    });
+//getGPSLocation();
+  
 
-    socket.on("typing", (data) => {
-      io.emit("typing", data + "is typing");
-    });
 
-    socket.on("msg", (data) => {
-      add(data.object);
-      io.emit("msg", data.name + ":" + data.object);
-    });
-  });
+io.on("connection", (socket) => {
+  console.log("detecteur connected");
+  socket.emit( "detecteur is connected");
+
 });
 
-server.listen(3000, console.log("server run"));
-module.exports = app;
+
+
+/*socket.on("aff", async (data) => {
+  const r = await affichesocket(data);
+  console.log("jjjjjj", JSON.stringify(r));
+  io.emit("aff", r);
+});
+*/
+app.set('socketio', io);
+
+
+
+  
+  server.listen(3002, console.log("server run"));
+
+  module.exports = app;
