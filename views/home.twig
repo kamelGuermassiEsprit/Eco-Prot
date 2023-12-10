@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Create Account - Aquatic Durable Project</title>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+
+  <body>
+    <h1>HELLO</h1>
+
+    <script>
+      const socket = io.connect();
+      let userConnected = localStorage.getItem("socket");
+      socket.emit("user-connected", userConnected);
+      socket.on("user-connected-front", (data) => {
+        console.log(data);
+        s = document.createElement("p");
+        s.innerHTML =
+          "<center>" +
+          "<p>" +
+          data +
+          "</p>" +
+          "is Connected </br>" +
+          "</center>";
+        document.body.appendChild(s);
+      });
+    </script>
+  </body>
+</html>

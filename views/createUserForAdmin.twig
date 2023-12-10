@@ -1,7 +1,10 @@
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <title>Admin Panel - Create User - Aquatic Design</title>
     <style>
-      /* Aquatic-themed styles */
+      /* Aquatic-themed admin panel styles */
       body {
         font-family: Arial, sans-serif;
         background-color: #aee7ff; /* Light blue resembling water */
@@ -43,6 +46,7 @@
       }
 
       input[type="text"],
+      input[type="email"],
       input[type="password"],
       input[type="submit"] {
         width: 100%;
@@ -64,48 +68,38 @@
     </style>
   </head>
   <body>
-    <form class="container" onsubmit="event.preventDefault(); login()">
+    <form class="container" onsubmit="event.preventDefault(); createAcount()">
       <form action="#">
-        <h2>Durable Aquatic Login</h2>
-        <label for="username">Username:</label>
-        <input type="text" id="email" name="username" required />
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-        <input type="submit" value="Login" />
-        <a href="/createAcount">Sign in</a>
+        <h2>Admin Panel - Create User</h2>
+        <div class="form-group">
+          <label for="firstname">First Name:</label>
+          <input type="text" id="first_name" name="firstname" required />
+        </div>
+        <div class="form-group">
+          <label for="lastname">Last Name:</label>
+          <input type="text" id="last_name" name="lastname" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div class="form-group">
+          <label>User Role:</label>
+          <div>
+            <input type="checkbox" id="admin_role" name="role" value="admin" />
+            <label for="admin_role">Admin</label>
+          </div>
+          <div>
+            <input type="checkbox" id="user_role" name="role" value="user" />
+            <label for="user_role">Simple User</label>
+          </div>
+        </div>
+        <input type="submit" value="Create User" />
       </form>
     </form>
-
-    <script>
-      function login() {
-        let user = {
-          email: email.value,
-          password: password.value,
-        };
-        fetch("/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        })
-          .then((response) => {
-            console.log(response);
-            if (response.ok) {
-              localStorage.setItem("socket", JSON.stringify(user.email));
-              window.location.href = "/home"; // Redirect to the specified URL
-            } else if (response.status == 501) {
-              alert("user Not Exist");
-              console.error("Login failed");
-            } else {
-              alert("Wrong password");
-            }
-          })
-          .catch((error) => {
-            // Handle any errors
-            console.error("Error:", error);
-          });
-      }
-    </script>
   </body>
 </html>

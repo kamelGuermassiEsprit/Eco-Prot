@@ -1,7 +1,10 @@
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <title>Create Account - Aquatic Durable Project</title>
     <style>
-      /* Aquatic-themed styles */
+      /* Aquatic Durable Project styles */
       body {
         font-family: Arial, sans-serif;
         background-color: #aee7ff; /* Light blue resembling water */
@@ -43,9 +46,10 @@
       }
 
       input[type="text"],
+      input[type="email"],
       input[type="password"],
       input[type="submit"] {
-        width: 100%;
+        width: 96%;
         padding: 10px;
         border-radius: 5px;
         border: 1px solid #ccc;
@@ -63,26 +67,43 @@
       }
     </style>
   </head>
+
   <body>
-    <form class="container" onsubmit="event.preventDefault(); login()">
+    <form class="container" onsubmit="event.preventDefault(); createAcount()">
       <form action="#">
-        <h2>Durable Aquatic Login</h2>
-        <label for="username">Username:</label>
-        <input type="text" id="email" name="username" required />
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-        <input type="submit" value="Login" />
-        <a href="/createAcount">Sign in</a>
+        <h2>Create Account - Aquatic Durable Project</h2>
+        <div class="form-group">
+          <label for="firstname">First Name:</label>
+          <input type="text" id="first_name" name="firstname" required />
+        </div>
+        <div class="form-group">
+          <label for="lastname">Last Name:</label>
+          <input type="text" id="last_name" name="lastname" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div style="margin-right: -21px">
+          <input type="submit" value="Create Account" />
+        </div>
       </form>
     </form>
 
     <script>
-      function login() {
+      function createAcount() {
         let user = {
           email: email.value,
           password: password.value,
+          first_name: first_name.value,
+          last_name: last_name.value,
         };
-        fetch("/login", {
+
+        fetch("/addAcount", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -92,13 +113,7 @@
           .then((response) => {
             console.log(response);
             if (response.ok) {
-              localStorage.setItem("socket", JSON.stringify(user.email));
-              window.location.href = "/home"; // Redirect to the specified URL
-            } else if (response.status == 501) {
-              alert("user Not Exist");
-              console.error("Login failed");
-            } else {
-              alert("Wrong password");
+              window.location.href = "/"; // Redirect to the specified URL
             }
           })
           .catch((error) => {
